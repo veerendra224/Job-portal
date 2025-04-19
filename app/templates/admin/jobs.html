@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Manage Jobs{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Manage Jobs</h2>
+    </div>
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Company</th>
+                            <th>Location</th>
+                            <th>Posted By</th>
+                            <th>Posted On</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in jobs %}
+                        <tr>
+                            <td>{{ job.id }}</td>
+                            <td>{{ job.title }}</td>
+                            <td>{{ job.company }}</td>
+                            <td>{{ job.location }}</td>
+                            <td>{{ job.employer.username }}</td>
+                            <td>{{ job.posted_at.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <span class="badge {% if job.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                                    {% if job.is_active %}Active{% else %}Inactive{% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <form method="POST" action="{{ url_for('main.admin_toggle_job', job_id=job.id) }}" class="d-inline">
+                                    <button type="submit" class="btn btn-sm 
+                                        {% if job.is_active %}btn-warning{% else %}btn-success{% endif %}">
+                                        {% if job.is_active %}Deactivate{% else %}Activate{% endif %}
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
